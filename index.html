@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Upload BinhFlix</title>
+    
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/film-reel.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- GIAO DIỆN PRO DARK MODE --- */
+        :root {
+            --primary-color: #e50914; /* Đỏ Netflix */
+            --bg-dark: #141414;
+            --bg-card: rgba(0, 0, 0, 0.85);
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            /* Hình nền rạp phim mờ ảo */
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('https://assets.nflxext.com/ffe/siteui/vlv3/ab180a27-b661-44cd-9579-9dcaf32d3cc4/29d8d72e-8c58-4694-89b6-081622384a21/VN-vi-20231009-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- CHỮ CHẠY --- */
+        .marquee-container {
+            width: 100%; max-width: 600px;
+            background: linear-gradient(90deg, rgba(229,9,20,0.1), rgba(229,9,20,0.4), rgba(229,9,20,0.1));
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 8px; margin-bottom: 25px; padding: 12px;
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.3);
+            backdrop-filter: blur(5px); overflow: hidden; position: relative;
+        }
+
+        .marquee-text {
+            color: #ffc107; font-weight: 700; font-size: 0.95rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            display: inline-block; white-space: nowrap;
+            animation: scrolling 18s linear infinite;
+        }
+
+        @keyframes scrolling {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .container { width: 100%; max-width: 500px; z-index: 2; }
+
+        .form-card {
+            background: var(--bg-card); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px; 
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .logo-icon {
+            font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px;
+            display: inline-block; text-shadow: 0 0 25px rgba(229, 9, 20, 0.8);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h2.form-title { font-weight: 800; font-size: 1.8rem; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        h2.form-title span { color: var(--primary-color); }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; margin-bottom: 8px; color: var(--text-gray); font-weight: 600; font-size: 0.9rem; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--text-gray); font-size: 1.1rem; transition: color 0.3s ease;
+        }
+        
+        .input-field {
+            width: 100%; padding: 14px 14px 14px 45px;
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 8px;
+            color: var(--text-light); font-size: 1rem; font-family: inherit; 
+            transition: all 0.3s ease;
+        }
+        
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+            padding-top: 15px;
+        }
+        textarea + i { top: 25px; }
+
+        .input-field:focus { 
+            outline: none; 
+            background: rgba(255, 255, 255, 0.15); 
+            border-color: var(--primary-color); 
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+        }
+        .input-field:focus + i { color: var(--primary-color); }
+
+        select.input-field {
+            appearance: none; -webkit-appearance: none; cursor: pointer;
+        }
+        select.input-field option { background-color: #141414; color: white; padding: 10px; }
+        .select-arrow { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-gray); pointer-events: none; }
+
+        .submit-btn {
+            width: 100%; padding: 16px; 
+            background: linear-gradient(45deg, #e50914, #b20710);
+            color: white; border: none; border-radius: 8px; 
+            font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.3s ease; 
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 5px 20px rgba(229, 9, 20, 0.4); margin-top: 15px;
+        }
+        .submit-btn:hover { 
+            background: linear-gradient(45deg, #ff1f2c, #e50914);
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.6); 
+        }
+        .submit-btn:active { transform: translateY(1px); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        .loading-spinner {
+            display: none; border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
+            border-top: 3px solid #fff; width: 22px; height: 22px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #status-message { margin-top: 20px; font-weight: 600; min-height: 25px; font-size: 0.95rem; }
+        .success-msg { color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .error-msg { color: #e74c3c; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .warning-msg { color: #f39c12; }
+        
+        .submit-btn.loading .btn-content { display: none; }
+        .submit-btn.loading .loading-spinner { display: block; }
+
+        .copyright { margin-top: 30px; color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; letter-spacing: 1px; }
+        .copyright span { color: var(--primary-color); font-weight: bold; }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .form-card { padding: 30px 20px; }
+            h2.form-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee-container">
+        <div class="marquee-text">
+            🚀 CỔNG UPLOAD PHIM BINHFLIX • CẬP NHẬT DỮ LIỆU TỨC THÌ CHO APP MOBILE • HỖ TRỢ LINK FSHARE/MP4 🚀
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-card">
+            <div class="logo-icon"><i class="fas fa-play-circle"></i></div>
+            <h2 class="form-title">Upload <span>BinhFlix</span></h2>
+            
+            <form id="movieForm">
+                <div class="input-group">
+                    <label>Tên Phim <span style="color:red">*</span></label>
+                    <div class="input-wrapper">
+                        <input type="text" name="TenPhim" class="input-field" placeholder="Ví dụ: Đào, Phở và Piano" required>
+                        <i class="fas fa-heading"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Thể Loại</label>
+                    <div class="input-wrapper">
+                        <select name="Theloai" id="Theloai" class="input-field">
+                            <option value="Hành Động">🔥 Hành Động</option>
+                            <option value="Võ Thuật">👊 Võ Thuật</option>
+                            <option value="Kinh Dị">👻 Kinh Dị</option>
+                            <option value="18+">🔞 Phim 18+</option>
+                            <option value="Tình Cảm">💕 Tình Cảm</option>
+                            <option value="Hài Hước">😂 Hài Hước</option>
+                            <option value="Hoạt Hình">🐯 Hoạt Hình</option>
+                            <option value="Viễn Tưởng">👽 Viễn Tưởng</option>
+                            <option value="Khác">🌐 Khác</option>
+                        </select>
+                        <i class="fas fa-layer-group"></i>
+                        <span class="select-arrow"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Link File Phim (Fshare/MP4) <span style="color:red">*</span></label>
+                    <div class="input-wrapper">
+                        <input type="url" name="LinkFshare" class="input-field" placeholder="https://www.fshare.vn/file/..." required>
+                        <i class="fas fa-link"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Link Ảnh Poster</label>
+                    <div class="input-wrapper">
+                        <input type="url" name="LinkHinhanh" class="input-field" placeholder="https://anhphim.jpg...">
+                        <i class="fas fa-image"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Mô Tả Ngắn</label>
+                    <div class="input-wrapper">
+                        <textarea name="Noidungphim" class="input-field" placeholder="Tóm tắt nội dung phim..."></textarea>
+                        <i class="fas fa-paragraph"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <div class="btn-content"><i class="fas fa-cloud-upload-alt"></i> <span>Đăng Phim Ngay</span></div>
+                    <div class="loading-spinner"></div>
+                </button>
+            </form>
+
+            <div id="status-message"></div>
+        </div>
+
+        <div style="text-align: center;">
+            <p class="copyright">© 2025 Power by <span>Bình Pro</span></p>
+        </div>
+    </div>
+
+    <script>
+        // 👇 LINK WEB APP MỚI CỦA BẠN (Đã cập nhật) 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyfnGhSpPvYxK21pFD1HVP0pNu4vcstw2hZlKHNVklK2NhZz3jPcDXyhVA025KGyQ77RA/exec';
+        // 👆👆👆
+
+        const form = document.forms['movieForm'];
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMsg = document.getElementById('status-message');
+        const theloaiSelect = document.getElementById('Theloai');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault(); 
+            
+            // Lưu lại thể loại đang chọn để không bị reset về mặc định
+            const currentTheLoai = theloaiSelect.value;
+            
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            statusMsg.innerHTML = '';
+            
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => response.json())
+            .then(response => {
+                if (response.result === 'success') {
+                    statusMsg.innerHTML = '<span class="success-msg"><i class="fas fa-check-circle"></i> Đã đăng thành công! Vào App reload nhé.</span>';
+                    
+                    form.reset(); // Xóa form
+                    
+                    // Khôi phục lại thể loại cũ để nhập tiếp cho tiện
+                    theloaiSelect.value = currentTheLoai; 
+                    
+                    setTimeout(() => { statusMsg.innerHTML = ''; }, 5000);
+                } else if (response.result === 'duplicate') {
+                    statusMsg.innerHTML = '<span class="warning-msg"><i class="fas fa-exclamation-circle"></i> ' + response.msg + '</span>';
+                } else {
+                    throw new Error(response.error);
+                }
+            })
+            .catch(error => {
+                statusMsg.innerHTML = '<span class="error-msg"><i class="fas fa-bug"></i> Lỗi kết nối! Kiểm tra lại Link Web App.</span>';
+                console.error('Error!', error.message);
+            })
+            .finally(() => {
+                 submitBtn.classList.remove('loading');
+                 submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
