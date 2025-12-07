@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Upload BinhFlix</title>
+    <title>Upload Phim V6 Pro (BinhFlix)</title>
     
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/film-reel.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- GIAO DIỆN PRO DARK MODE --- */
+        /* --- GIAO DIỆN DARK MODE PRO --- */
         :root {
             --primary-color: #e50914; /* Đỏ Netflix */
             --bg-dark: #141414;
@@ -38,7 +39,7 @@
             padding: 20px;
         }
 
-        /* --- CHỮ CHẠY --- */
+        /* --- CHỮ CHẠY MARQUEE --- */
         .marquee-container {
             width: 100%; max-width: 600px;
             background: linear-gradient(90deg, rgba(229,9,20,0.1), rgba(229,9,20,0.4), rgba(229,9,20,0.1));
@@ -192,13 +193,13 @@
                     <div class="input-wrapper">
                         <select name="Theloai" id="Theloai" class="input-field">
                             <option value="Hành Động">🔥 Hành Động</option>
-                            <option value="Võ Thuật">👊 Võ Thuật</option>
+                            <option value="Viễn Tưởng">👽 Viễn Tưởng</option>
                             <option value="Kinh Dị">👻 Kinh Dị</option>
-                            <option value="18+">🔞 Phim 18+</option>
                             <option value="Tình Cảm">💕 Tình Cảm</option>
                             <option value="Hài Hước">😂 Hài Hước</option>
                             <option value="Hoạt Hình">🐯 Hoạt Hình</option>
-                            <option value="Viễn Tưởng">👽 Viễn Tưởng</option>
+                            <option value="18+">🔞 Phim 18+</option>
+                            <option value="Võ Thuật">👊 Võ Thuật</option>
                             <option value="Khác">🌐 Khác</option>
                         </select>
                         <i class="fas fa-layer-group"></i>
@@ -245,9 +246,9 @@
     </div>
 
     <script>
-        // 👇 LINK WEB APP MỚI CỦA BẠN (Đã cập nhật) 👇
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyfnGhSpPvYxK21pFD1HVP0pNu4vcstw2hZlKHNVklK2NhZz3jPcDXyhVA025KGyQ77RA/exec';
-        // 👆👆👆
+        // 👇 LINK WEB APP MỚI NHẤT CỦA BẠN 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby07iax4ibFUUbHQi13bxCN5jmoPvM_BrALJRW-IH78x7XZaOOXoxxhPVbuRMVCA_dL_g/exec';
+        // 👆
 
         const form = document.forms['movieForm'];
         const submitBtn = document.getElementById('submitBtn');
@@ -257,7 +258,7 @@
         form.addEventListener('submit', e => {
             e.preventDefault(); 
             
-            // Lưu lại thể loại đang chọn để không bị reset về mặc định
+            // Lưu lại thể loại đang chọn
             const currentTheLoai = theloaiSelect.value;
             
             submitBtn.classList.add('loading');
@@ -268,11 +269,11 @@
             .then(response => response.json())
             .then(response => {
                 if (response.result === 'success') {
-                    statusMsg.innerHTML = '<span class="success-msg"><i class="fas fa-check-circle"></i> Đã đăng thành công! Vào App reload nhé.</span>';
+                    statusMsg.innerHTML = '<span class="success-msg"><i class="fas fa-check-circle"></i> Thành công! Phim đã vào App.</span>';
                     
-                    form.reset(); // Xóa form
+                    form.reset(); // Xóa trắng form
                     
-                    // Khôi phục lại thể loại cũ để nhập tiếp cho tiện
+                    // Giữ nguyên thể loại để nhập tiếp
                     theloaiSelect.value = currentTheLoai; 
                     
                     setTimeout(() => { statusMsg.innerHTML = ''; }, 5000);
@@ -283,7 +284,7 @@
                 }
             })
             .catch(error => {
-                statusMsg.innerHTML = '<span class="error-msg"><i class="fas fa-bug"></i> Lỗi kết nối! Kiểm tra lại Link Web App.</span>';
+                statusMsg.innerHTML = '<span class="error-msg"><i class="fas fa-bug"></i> Lỗi kết nối! Kiểm tra lại Link Script.</span>';
                 console.error('Error!', error.message);
             })
             .finally(() => {
